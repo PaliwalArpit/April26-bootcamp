@@ -1,0 +1,23 @@
+Kubernetes-world/3-tier-app/k8s-kind/deploy.sh
+  s_0b85e505bc2274::t_387e0c0ecf0b44 34-45
+Kubernetes-world/3-tier-app/k8s-kind/manifests/31-frontend-deployment.yaml
+  s_0b85e505bc2274::t_de6935bf3eabc3 20-30
+Kubernetes-world/3-tier-app/k8s-kind/manifests/21-backend-deployment.yaml
+  s_0b85e505bc2274::t_cb2159c79806fc 20-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "0d87135d45ba1647b239416f0495f198b80ee4c7",
+  "prompts": {},
+  "sessions": {
+    "s_0b85e505bc2274": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8795e174-fe89-47f6-ba5b-9b187dc0f0b9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Arpit Paliwal <arpit.paliwal@deliveryhero.com>"
+    }
+  }
+}
