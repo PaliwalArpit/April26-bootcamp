@@ -31,6 +31,18 @@ fi
 kubectl config use-context "kind-${CLUSTER_NAME}" >/dev/null
 kubectl wait --for=condition=Ready nodes --all --timeout=180s
 
+# Dedicate one worker to frontend-only and one to backend-only. The taint
+# (NoSchedule) blocks anything without a matching toleration; the label is
+# what backend/frontend Deployments' nodeSelector actually targets -- a
+# toleration alone only permits scheduling there, it doesn't attract it.
+# ${CLUSTER_NAME}-worker2 is left untouched: CNPG's Postgres PV is node-pinned
+# there (kind's local-path-provisioner), so it -- and anything else (the
+# migration Job, etc.) -- naturally lands on the one remaining untainted node.
+kubectl label node "${CLUSTER_NAME}-worker" workload=frontend --overwrite
+kubectl taint node "${CLUSTER_NAME}-worker" dedicated=frontend:NoSchedule --overwrite
+kubectl label node "${CLUSTER_NAME}-worker3" workload=backend --overwrite
+kubectl taint node "${CLUSTER_NAME}-worker3" dedicated=backend:NoSchedule --overwrite
+
 # --- 2. ingress-nginx (kind-flavored manifest, maps hostPorts 80/443) ------
 if ! kubectl get ns ingress-nginx >/dev/null 2>&1; then
   echo "Installing ingress-nginx..."

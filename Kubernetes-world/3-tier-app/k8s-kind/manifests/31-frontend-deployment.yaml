@@ -12,36 +12,22 @@ spec:
   selector:
     matchLabels:
       app: frontend
-  # Same reasoning as backend-deployment.yaml: required self anti-affinity
-  # caps this at 3 pods (one per node), so surging a 4th during rollout would
-  # deadlock. maxSurge=0 frees a node before scheduling each new pod.
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
   template:
     metadata:
       labels:
         app: frontend
     spec:
-      affinity:
-        # Required anti-affinity: no two frontend pods on the same node
-        # (mirrors backend-deployment.yaml, spreads 3 replicas over 3 workers).
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: frontend
-            topologyKey: kubernetes.io/hostname
-        # Required affinity: every frontend pod must land on a node that
-        # already has a backend pod, pairing them 1:1 per node.
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: backend
-            topologyKey: kubernetes.io/hostname
+      # 3-tier-app-worker is tainted dedicated=frontend:NoSchedule and labeled
+      # workload=frontend (see deploy.sh). Toleration permits scheduling past
+      # the taint; nodeSelector is what actually attracts these pods there.
+      # All 3 replicas land together on this one node by design.
+      nodeSelector:
+        workload: frontend
+      tolerations:
+      - key: dedicated
+        operator: Equal
+        value: frontend
+        effect: NoSchedule
       containers:
       - name: frontend
         image: apaliwal14/augk8s26-frontend:1a4d72e

@@ -12,30 +12,23 @@ spec:
   selector:
     matchLabels:
       app: backend
-  # Required self anti-affinity means only 3 backend pods can ever fit (one
-  # per worker node). The RollingUpdate default (maxSurge=25%) tries to add a
-  # surge pod on top of all 3 already-running old pods -- a 4th slot that no
-  # node can satisfy, deadlocking the rollout. maxSurge=0 forces it to free a
-  # node (kill one old pod) before scheduling each new one.
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
   template:
     metadata:
       labels:
         app: backend
     spec:
-      # Required (hard) anti-affinity: no two backend pods on the same node.
-      # With 3 replicas and 3 workers this pins one backend pod per node.
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: backend
-            topologyKey: kubernetes.io/hostname
+      # 3-tier-app-worker3 is tainted dedicated=backend:NoSchedule and labeled
+      # workload=backend (see deploy.sh). The toleration lets these pods
+      # ignore that taint; the nodeSelector is what actually attracts them
+      # there -- tolerations alone only permit scheduling, they don't pin it.
+      # All 3 replicas land together on this one node by design.
+      nodeSelector:
+        workload: backend
+      tolerations:
+      - key: dedicated
+        operator: Equal
+        value: backend
+        effect: NoSchedule
       containers:
       - name: backend
         image: apaliwal14/augk8s26-backend:fix-scram
