@@ -12,6 +12,15 @@ spec:
   selector:
     matchLabels:
       app: backend
+  # Recreate, not RollingUpdate: all 3 replicas are dedicated to one node
+  # (nodeSelector below), so a surge pod during rollout would need a 4th slot
+  # on the SAME node the old pods already occupy -- fine on its own, but if
+  # the previous revision carried pod anti-affinity (as this one briefly did),
+  # the old pods' anti-affinity outlives them until they're deleted and blocks
+  # any new same-labeled pod from joining that node. Recreate sidesteps all of
+  # that by tearing down every old pod before creating new ones.
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:

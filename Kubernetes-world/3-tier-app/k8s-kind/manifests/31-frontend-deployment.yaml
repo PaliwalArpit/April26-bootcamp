@@ -12,6 +12,10 @@ spec:
   selector:
     matchLabels:
       app: frontend
+  # See backend-deployment.yaml for why this must be Recreate, not
+  # RollingUpdate, now that all replicas are dedicated to one node.
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
