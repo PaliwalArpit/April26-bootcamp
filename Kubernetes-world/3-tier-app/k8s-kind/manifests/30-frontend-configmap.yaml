@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: quiz-app
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  BACKEND_URL: "http://backend-service.quiz-app.svc.cluster.local:8080"

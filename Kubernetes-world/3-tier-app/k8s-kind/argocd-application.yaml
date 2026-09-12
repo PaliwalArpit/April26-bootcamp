@@ -1,0 +1,27 @@
+# Bootstrap resource: applied once directly with `kubectl apply` (ArgoCD
+# Applications aren't self-referential — something has to create the first one).
+# From here on, ArgoCD watches the "manifests/" path on PaliwalArpit's fork and
+# automatically syncs any change pushed to main.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quiz-app
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/PaliwalArpit/April26-bootcamp.git
+    targetRevision: main
+    path: Kubernetes-world/3-tier-app/k8s-kind/manifests
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: quiz-app
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false

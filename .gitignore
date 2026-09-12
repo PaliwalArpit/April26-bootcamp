@@ -217,3 +217,6 @@ __marimo__/
 *.tfstate.backup
 *.tfstate.backup.lock.info
 *.tfstate.backup.lock.info.backup.DS_Store
+
+# local-only secrets for the kind + ArgoCD + CNPG assignment (never commit real credentials)
+Kubernetes-world/3-tier-app/k8s-kind/secrets-local/

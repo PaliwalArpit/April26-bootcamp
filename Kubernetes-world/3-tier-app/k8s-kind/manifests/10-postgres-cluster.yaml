@@ -1,0 +1,33 @@
+# CloudNativePG Cluster: one CRD gives us a managed Postgres running as pods
+# in this cluster, backed by PVCs (via the kind default StorageClass).
+#
+# The referenced Secret "quiz-pg-app-user" is intentionally NOT in this
+# directory (and not committed to git) — it's applied out-of-band by
+# deploy.sh from k8s-kind/secrets-local/ before ArgoCD ever syncs this Cluster.
+# CNPG just needs the Secret to exist at creation time; ArgoCD doesn't need to
+# own it. Same GitOps-minus-secrets pattern used for backend-secret below.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: quiz-pg
+  namespace: quiz-app
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
+  storage:
+    size: 1Gi
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  bootstrap:
+    initdb:
+      database: devops_learning
+      owner: quizapp
+      secret:
+        name: quiz-pg-app-user
