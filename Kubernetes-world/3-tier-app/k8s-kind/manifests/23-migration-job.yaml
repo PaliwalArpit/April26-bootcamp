@@ -1,20 +1,21 @@
-# Runs migrate.sh (flask db upgrade + seed) once before backend/frontend come up.
-# sync-wave "0" puts it after the namespace/Postgres cluster (waves -2/-1) and
-# before the backend/frontend Deployments (wave 1).
-# sync-options Replace=true: Job pod templates are immutable, so a normal
-# `kubectl apply` on re-sync would fail once the image tag changes. Replace
-# tells ArgoCD to delete+recreate the Job instead.
-# The wait-loop below is the real safety net: it doesn't matter whether CNPG
-# reports "Ready" by the time this wave starts, the Job just blocks until the
-# primary actually accepts connections.
+# Runs migrate.sh (flask db upgrade + seed) as an ArgoCD PostSync hook: it
+# runs after the main Sync phase, so the namespace/CNPG cluster/configmaps are
+# already applied and live by the time this Job starts.
+# hook-delete-policy BeforeHookCreation deletes the previous run's Job first —
+# Job pod templates are immutable, so once the image tag changes a plain
+# `kubectl apply` (or `Replace=true`, which does a raw PUT and drops the
+# auto-generated immutable spec.selector) fails; delete-then-create sidesteps
+# that entirely.
+# The wait-loop below is the real safety net regardless of hook ordering: it
+# blocks until Postgres actually accepts connections before running migrate.sh.
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: backend-migration
   namespace: quiz-app
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
-    argocd.argoproj.io/sync-options: Replace=true
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
   backoffLimit: 3
   template:
