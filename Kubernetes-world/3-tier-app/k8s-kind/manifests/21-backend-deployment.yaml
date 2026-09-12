@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: apaliwal14/augk8s26-backend:1a4d72e
+        image: apaliwal14/augk8s26-backend:fix-scram
         ports:
         - containerPort: 8000
 

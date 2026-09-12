@@ -25,7 +25,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrate
-          image: apaliwal14/augk8s26-backend:1a4d72e
+          image: apaliwal14/augk8s26-backend:fix-scram
           command:
             - /bin/bash
             - -c
