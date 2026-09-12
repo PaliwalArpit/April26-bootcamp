@@ -8,7 +8,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: backend
@@ -17,6 +17,15 @@ spec:
       labels:
         app: backend
     spec:
+      # Required (hard) anti-affinity: no two backend pods on the same node.
+      # With 3 replicas and 3 workers this pins one backend pod per node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: backend
+            topologyKey: kubernetes.io/hostname
       containers:
       - name: backend
         image: apaliwal14/augk8s26-backend:fix-scram

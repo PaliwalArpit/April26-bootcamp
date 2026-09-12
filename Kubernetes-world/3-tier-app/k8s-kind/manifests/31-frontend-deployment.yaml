@@ -8,7 +8,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: frontend
@@ -17,6 +17,23 @@ spec:
       labels:
         app: frontend
     spec:
+      affinity:
+        # Required anti-affinity: no two frontend pods on the same node
+        # (mirrors backend-deployment.yaml, spreads 3 replicas over 3 workers).
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: frontend
+            topologyKey: kubernetes.io/hostname
+        # Required affinity: every frontend pod must land on a node that
+        # already has a backend pod, pairing them 1:1 per node.
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: backend
+            topologyKey: kubernetes.io/hostname
       containers:
       - name: frontend
         image: apaliwal14/augk8s26-frontend:1a4d72e
