@@ -36,6 +36,12 @@ if ! kubectl get ns ingress-nginx >/dev/null 2>&1; then
   echo "Installing ingress-nginx..."
   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.0/deploy/static/provider/kind/deploy.yaml
 fi
+# The kind provider manifest's nodeSelector is just kubernetes.io/os=linux, so
+# the scheduler is free to place the controller on any worker -- but only the
+# control-plane node actually has host ports 80/443 mapped (see kind-config.yaml).
+# Pin it to the ingress-ready-labeled control-plane node so localhost:80/443 work.
+kubectl -n ingress-nginx patch deployment ingress-nginx-controller --type merge \
+  -p '{"spec":{"template":{"spec":{"nodeSelector":{"kubernetes.io/os":"linux","ingress-ready":"true"}}}}}'
 kubectl wait --namespace ingress-nginx --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller --timeout=180s
 
@@ -48,6 +54,21 @@ if ! kubectl get ns argocd >/dev/null 2>&1; then
   helm install argocd argo/argo-cd -n argocd
 fi
 kubectl -n argocd rollout status deployment/argocd-server --timeout=180s
+
+# On kind/bare-metal, ingress-nginx never populates Ingress.status.loadBalancer
+# (there's no cloud LB to assign one), so ArgoCD's default Ingress health check
+# waits forever and any PostSync hook (our migration Job) never fires. Teach it
+# to treat Ingress as healthy once created -- standard fix for non-cloud clusters.
+kubectl -n argocd patch configmap argocd-cm --type merge --patch '
+data:
+  resource.customizations.health.networking.k8s.io_Ingress: |
+    hs = {}
+    hs.status = "Healthy"
+    hs.message = "kind ingress-nginx has no LoadBalancer status; treat as healthy once created"
+    return hs
+'
+kubectl -n argocd delete pod argocd-application-controller-0 --ignore-not-found
+kubectl -n argocd wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-application-controller --timeout=120s
 
 # --- 4. CloudNativePG operator ----------------------------------------------
 if ! kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1; then
