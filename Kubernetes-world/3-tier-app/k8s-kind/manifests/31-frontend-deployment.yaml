@@ -12,6 +12,14 @@ spec:
   selector:
     matchLabels:
       app: frontend
+  # Same reasoning as backend-deployment.yaml: required self anti-affinity
+  # caps this at 3 pods (one per node), so surging a 4th during rollout would
+  # deadlock. maxSurge=0 frees a node before scheduling each new pod.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   template:
     metadata:
       labels:

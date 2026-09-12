@@ -12,6 +12,16 @@ spec:
   selector:
     matchLabels:
       app: backend
+  # Required self anti-affinity means only 3 backend pods can ever fit (one
+  # per worker node). The RollingUpdate default (maxSurge=25%) tries to add a
+  # surge pod on top of all 3 already-running old pods -- a 4th slot that no
+  # node can satisfy, deadlocking the rollout. maxSurge=0 forces it to free a
+  # node (kill one old pod) before scheduling each new one.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   template:
     metadata:
       labels:
