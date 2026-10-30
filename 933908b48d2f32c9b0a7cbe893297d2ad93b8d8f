@@ -1,0 +1,50 @@
+Kubernetes-world/3-tier-app/k8s-kind/manifests/30-frontend-configmap.yaml
+  s_0b85e505bc2274::t_4e828c4dbffd81 1-9
+Kubernetes-world/3-tier-app/k8s-kind/manifests/32-frontend-service.yaml
+  s_0b85e505bc2274::t_3775ef5ba474ef 1-15
+Kubernetes-world/3-tier-app/k8s-kind/manifests/40-ingress.yaml
+  s_0b85e505bc2274::t_f06a3c63e28856 1-27
+Kubernetes-world/3-tier-app/k8s-kind/manifests/20-backend-configmap.yaml
+  s_0b85e505bc2274::t_efe441ced5cce2 6-7
+  s_0b85e505bc2274::t_42a7e52afe06c3 1-5,8-13
+Kubernetes-world/3-tier-app/k8s-kind/manifests/10-postgres-cluster.yaml
+  s_0b85e505bc2274::t_7ee82769c700a0 1-13,16-33
+  s_0b85e505bc2274::t_ffc7270dcfac98 14-15
+Kubernetes-world/3-tier-app/k8s-kind/kind-config.yaml
+  s_0b85e505bc2274::t_dd27011953c0eb 1-24
+Kubernetes-world/3-tier-app/k8s-kind/manifests/00-namespace.yaml
+  s_0b85e505bc2274::t_80a027a53110f1 1-4
+  s_0b85e505bc2274::t_c717cb927f21fb 5-6
+Kubernetes-world/3-tier-app/k8s-kind/manifests/22-backend-service.yaml
+  s_0b85e505bc2274::t_6b915f1a24a18a 1-5,8-15
+  s_0b85e505bc2274::t_0ce63e599a3195 6-7
+.gitignore
+  s_0b85e505bc2274::t_cfde460de5ff6d 220-222
+Kubernetes-world/3-tier-app/k8s-kind/argocd-application.yaml
+  s_0b85e505bc2274::t_c5d35e0d7d8b7e 1-27
+Kubernetes-world/3-tier-app/k8s-kind/deploy.sh
+  s_0b85e505bc2274::t_cf1e3f5fd82776 1-97
+Kubernetes-world/3-tier-app/k8s-kind/manifests/21-backend-deployment.yaml
+  s_0b85e505bc2274::t_861f8be932d157 1-7,10-98
+  s_0b85e505bc2274::t_fb77641f8dcbd4 8-9
+Kubernetes-world/3-tier-app/k8s-kind/manifests/23-migration-job.yaml
+  s_0b85e505bc2274::t_31452149202361 1-82
+Kubernetes-world/3-tier-app/k8s-kind/manifests/31-frontend-deployment.yaml
+  s_0b85e505bc2274::t_e06b83bd6a1e2a 1-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "933908b48d2f32c9b0a7cbe893297d2ad93b8d8f",
+  "prompts": {},
+  "sessions": {
+    "s_0b85e505bc2274": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8795e174-fe89-47f6-ba5b-9b187dc0f0b9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Arpit Paliwal <arpit.paliwal@deliveryhero.com>"
+    }
+  }
+}

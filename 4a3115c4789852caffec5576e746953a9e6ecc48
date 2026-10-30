@@ -1,0 +1,23 @@
+Kubernetes-world/3-tier-app/src/backend/requirements.txt
+  s_0b85e505bc2274::t_acf6b7e46078fb 5
+Kubernetes-world/3-tier-app/k8s-kind/manifests/23-migration-job.yaml
+  s_0b85e505bc2274::t_42255b13ef4847 28
+Kubernetes-world/3-tier-app/k8s-kind/manifests/21-backend-deployment.yaml
+  s_0b85e505bc2274::t_42255b13ef4847 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "4a3115c4789852caffec5576e746953a9e6ecc48",
+  "prompts": {},
+  "sessions": {
+    "s_0b85e505bc2274": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8795e174-fe89-47f6-ba5b-9b187dc0f0b9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Arpit Paliwal <arpit.paliwal@deliveryhero.com>"
+    }
+  }
+}
