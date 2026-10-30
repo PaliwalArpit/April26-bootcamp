@@ -1,0 +1,41 @@
+.github/workflows/day9-devsecops.yaml
+  s_b474ffa3b7ee74::t_eba902be45cf40 201-202
+  s_b474ffa3b7ee74::t_9daaa008c656d4 83
+  s_b474ffa3b7ee74::t_bbbc588e4ae2f1 209
+  s_b474ffa3b7ee74::t_355f7668804e9f 1-2,4-32,34-82,84-167,169-178,180-200,203-208,210-307
+  s_b474ffa3b7ee74::t_1ec63ac0c81032 3
+  s_b474ffa3b7ee74::t_09c4a1905fbde8 33
+  s_b474ffa3b7ee74::t_b981d2f4a96b2c 179
+  s_b474ffa3b7ee74::t_1a4d9ecd5e556b 168
+day9-ecs-terraform/DEVSECOPS.md
+  s_b474ffa3b7ee74::t_be37072b74c552 1-119
+day9-ecs-terraform/src/pyproject.toml
+  s_b474ffa3b7ee74::t_45f63ef463182c 15
+  s_b474ffa3b7ee74::t_f0e30b8b9abc5b 1-14
+day9-ecs-terraform/src/requirements-dev.txt
+  s_b474ffa3b7ee74::t_997871d5d3d959 1-6
+day9-ecs-terraform/scripts/smoke-test.sh
+  s_b474ffa3b7ee74::t_f47f6fbdd7e256 1-58
+.pre-commit-config.yaml
+  s_b474ffa3b7ee74::t_fc1f7800bc0822 1-24
+day9-ecs-terraform/.gitleaks.toml
+  s_b474ffa3b7ee74::t_8330974edccbdd 1-19
+day9-ecs-terraform/src/.dockerignore
+  s_b474ffa3b7ee74::t_ae431f6c67808d 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "210183e73b30ef5f2b726557ef29d42c4986c3fc",
+  "prompts": {},
+  "sessions": {
+    "s_b474ffa3b7ee74": {
+      "agent_id": {
+        "tool": "gemini",
+        "id": "e6bb334e-8b4a-4880-99eb-ff08e26f8bb8",
+        "model": "gemini-3.8-flash"
+      },
+      "human_author": "ArpitPaliwal <arpitpaliwal14@gmail.com>"
+    }
+  }
+}
